@@ -12,6 +12,7 @@
 		{
 			"files": ["*.html"],
 			"options": {
+				"tabWidth": 2,
 				"parser": "jinja-template"
 			}
 		}
