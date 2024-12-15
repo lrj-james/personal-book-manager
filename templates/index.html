@@ -10,4 +10,29 @@
 		placeholder="Search for a book"
 		type="text"
 	/>
+
+	<ul></ul>
+
+	<script>
+		const url = 'https://www.googleapis.com/books/v1/volumes';
+		const fields = 'items(volumeInfo(title))';
+
+		let input = document.querySelector('input');
+
+		input.addEventListener('input', async function () {
+			let response = await fetch(url + `?q=${input.value}&fields=${fields}`);
+			console.log(url + `?q=${input.value}&fields=${fields}`);
+			let books = await response.json();
+			let html = '';
+			for (let items in books) {
+				for (let i = 0; i < 10; i++) {
+					let title = books[items][i].volumeInfo.title
+						.replace('<', '&lt;')
+						.replace('&', '&amp;');
+					html += '<li>' + title + '</li>';
+				}
+			}
+			document.querySelector('ul').innerHTML = html;
+		});
+	</script>
 {% endblock %}
