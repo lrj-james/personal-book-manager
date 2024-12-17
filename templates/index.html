@@ -15,24 +15,59 @@
 
 	<script>
 		const url = 'https://www.googleapis.com/books/v1/volumes';
-		const fields = 'items(volumeInfo(title))';
+		const fields = 'items(volumeInfo(title,authors,publisher,publishedDate))';
+		const maxResults = 10;
+		const orderBy = 'relevance';
 
 		let input = document.querySelector('input');
+		let timeout = null;
 
-		input.addEventListener('input', async function () {
-			let response = await fetch(url + `?q=${input.value}&fields=${fields}`);
-			console.log(url + `?q=${input.value}&fields=${fields}`);
-			let books = await response.json();
-			let html = '';
-			for (let items in books) {
-				for (let i = 0; i < 10; i++) {
-					let title = books[items][i].volumeInfo.title
-						.replace('<', '&lt;')
-						.replace('&', '&amp;');
-					html += '<li>' + title + '</li>';
+		input.addEventListener('input', function () {
+			clearTimeout(timeout);
+			timeout = setTimeout(async function () {
+				const query = input.value.trim();
+				if (query === '') {
+					document.querySelector('ul').innerHTML = '';
+					return;
 				}
-			}
-			document.querySelector('ul').innerHTML = html;
+
+				try {
+					let response = await fetch(
+						url + `?fields=${fields}&orderBy=${orderBy}&q=${query}`
+					);
+					let books = await response.json();
+					let html = '';
+					if (books.items) {
+						books.items.forEach(item => {
+							let title = item.volumeInfo.title
+								.replace('<', '&lt;')
+								.replace('&', '&amp;');
+							let authors = item.volumeInfo.authors
+								? item.volumeInfo.authors.join(', ')
+								: 'Unknown author';
+							let year = item.volumeInfo.publishedDate
+								? item.volumeInfo.publishedDate.substr(0, 4)
+								: 'Unknown year';
+							let publisher = item.volumeInfo.publisher
+								? item.volumeInfo.publisher
+								: 'Unknown publisher';
+							html +=
+								'<li>' +
+								title +
+								' | ' +
+								authors +
+								' | ' +
+								year +
+								' | ' +
+								publisher +
+								'</li>';
+						});
+					}
+					document.querySelector('ul').innerHTML = html;
+				} catch (error) {
+					console.error('Error fetching books:', error);
+				}
+			}, 300); // 300ms debounce
 		});
 	</script>
 {% endblock %}
