@@ -1,6 +1,6 @@
 {
 	"printWidth": 80,
-	"tabWidth": 4,
+	"tabWidth": 2,
 	"useTabs": true,
 	"semi": true,
 	"singleQuote": true,
@@ -14,6 +14,27 @@
 			"options": {
 				"tabWidth": 2,
 				"parser": "jinja-template"
+			}
+		},
+		{
+			"files": ["*.js"],
+			"options": {
+				"tabWidth": 2,
+				"parser": "babel"
+			}
+		},
+		{
+			"files": ["*.css"],
+			"options": {
+				"tabWidth": 2,
+				"parser": "css"
+			}
+		},
+		{
+			"files": ["*.py"],
+			"options": {
+				"tabWidth": 4,
+				"parser": "python"
 			}
 		}
 	]
