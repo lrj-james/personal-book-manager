@@ -12,7 +12,7 @@ input.addEventListener('input', function () {
 	timeout = setTimeout(async function () {
 		const query = input.value.trim();
 		if (query === '') {
-			document.querySelector('ul').innerHTML = '';
+			document.getElementById('indexSearchResult').innerHTML = '';
 			return;
 		}
 
@@ -23,9 +23,7 @@ input.addEventListener('input', function () {
 
 			if (books.items) {
 				books.items.forEach(item => {
-					let title = item.volumeInfo.title
-						.replace('<', '&lt;')
-						.replace('&', '&amp;');
+					let title = item.volumeInfo.title;
 					let authors = item.volumeInfo.authors
 						? item.volumeInfo.authors.join(', ')
 						: 'Unknown author';
@@ -35,6 +33,7 @@ input.addEventListener('input', function () {
 					let publisher = item.volumeInfo.publisher
 						? item.volumeInfo.publisher
 						: 'Unknown publisher';
+
 					html +=
 						'<li>' +
 						title +
@@ -47,9 +46,9 @@ input.addEventListener('input', function () {
 						'</li>';
 				});
 			}
-			document.querySelector('ul').innerHTML = html;
+			document.getElementById('indexSearchResult').innerHTML = html;
 		} catch (error) {
 			console.error('Error fetching books:', error);
 		}
-	}, 300); // 300ms debounce
+	}, 300); // 300ms debounce, suggested by GitHub Copilot
 });

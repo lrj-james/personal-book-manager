@@ -5,16 +5,21 @@
 {% endblock %}
 
 {% block content %}
-	<input
-		id="indexSearchBar"
-		autocomplete="off"
-		autofocus
-		name="indexSearchBar"
-		placeholder="Search for a book"
-		type="text"
-	/>
-
-	<ul id="indexSearchResult"></ul>
-
+	<div class="row justify-content-center">
+		<div class="col-lg-8 col-lg-6">
+			<div class="input-group mb-3">
+				<input
+					id="indexSearchBar"
+					class="form-control form-control-lg"
+					autocomplete="off"
+					autofocus
+					name="indexSearchBar"
+					placeholder="Search for a book"
+					type="text"
+				/>
+			</div>
+			<div class="list-group" id="indexSearchResult"></div>
+		</div>
+	</div>
 	<script src="static/searchBar.js"></script>
 {% endblock %}
