@@ -16,10 +16,38 @@ body {
 	overflow-y: auto;
 }
 
-.list-group-item {
-	transition: background-color 0.2s;
+.book-item {
+	padding: 1rem;
+	margin-bottom: 0.5rem;
+	background-color: white;
+	border: 1px solid rgba(0, 0, 0, 0.125);
+	border-radius: 0.25rem;
+	transition: all 0.3s ease;
 }
 
-.list-group-item:hover {
-	background-color: #f8f9fa;
+.book-item:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+}
+
+.book-title {
+	font-size: 1.1rem;
+	margin-bottom: 0.5rem;
+}
+
+.book-authors {
+	color: #6c757d;
+	font-size: 0.9rem;
+}
+
+.book-details {
+	display: none;
+	margin-top: 1rem;
+	padding-top: 1rem;
+	border-top: 1px solid #dee2e6;
+}
+
+.book-item.active .book-details {
+	display: flex;
 }

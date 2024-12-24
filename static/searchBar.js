@@ -1,8 +1,11 @@
 // This script fetches book data from the Google Books API and displays it in a list.
 // With a little help from GitHub Copilot.
 
+// Using Google Books API
 const url = 'https://www.googleapis.com/books/v1/volumes';
-const fields = 'items(volumeInfo(title,authors,publisher,publishedDate))';
+// Fields to fetch from the API
+const fields =
+	'items(volumeInfo(title,authors,publisher,publishedDate,publisher,language,imageLinks/smallThumbnail))';
 
 let input = document.getElementById('indexSearchBar');
 let timeout = null;
@@ -11,44 +14,51 @@ input.addEventListener('input', function () {
 	clearTimeout(timeout);
 	timeout = setTimeout(async function () {
 		const query = input.value.trim();
+		const resultDiv = document.getElementById('indexSearchResult');
+		resultDiv.innerHTML = '';
 		if (query === '') {
-			document.getElementById('indexSearchResult').innerHTML = '';
 			return;
 		}
 
 		try {
 			let response = await fetch(url + `?fields=${fields}&q=${query}`);
 			let books = await response.json();
-			let html = '';
 
 			if (books.items) {
-				books.items.forEach(item => {
-					let title = item.volumeInfo.title;
-					let authors = item.volumeInfo.authors
-						? item.volumeInfo.authors.join(', ')
-						: 'Unknown author';
-					let year = item.volumeInfo.publishedDate
-						? item.volumeInfo.publishedDate.substr(0, 4)
-						: 'Unknown year';
-					let publisher = item.volumeInfo.publisher
-						? item.volumeInfo.publisher
-						: 'Unknown publisher';
+				books.items.forEach(book => {
+					const bookInfo = book.volumeInfo;
+					const div = document.createElement('div');
+					div.className = 'book-item';
 
-					html +=
-						'<li>' +
-						title +
-						' | ' +
-						authors +
-						' | ' +
-						year +
-						' | ' +
-						publisher +
-						'</li>';
+					div.innerHTML = `
+												<div class="book-title">${bookInfo.title}</div>
+                        <div class="book-authors">${bookInfo.authors ? bookInfo.authors.join(', ') : 'Unknown author'}</div>
+                        <div class="book-details row">
+                            <div class="col-md-4">
+                                <img src="${bookInfo.imageLinks?.smallThumbnail || 'https://via.placeholder.com/128'}" alt="Book cover" class="img-fluid">
+                            </div>
+                            <div class="col-md-8">
+                                <p>Published at: ${bookInfo.publishedDate || 'Unknown'}</p>
+                                <p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
+                                <p>Language: ${bookInfo.language || 'Unknown'}</p>
+																<a href="${bookInfo.infoLink}" target="_blank" class="btn btn-primary btn-sm mt-2">More Info</a>
+                                <button class="btn btn-success btn-sm mt-2" onclick="addToShelf(${JSON.stringify(bookInfo)})">Add to Shelf</button>
+                            </div>
+                        </div>
+                    `;
+
+					div.addEventListener('click', function () {
+						document.querySelectorAll('.book-item').forEach(item => {
+							if (item !== div) item.classList.remove('active');
+						});
+						div.classList.toggle('active');
+					});
+
+					resultDiv.appendChild(div);
 				});
 			}
-			document.getElementById('indexSearchResult').innerHTML = html;
 		} catch (error) {
 			console.error('Error fetching books:', error);
 		}
-	}, 300); // 300ms debounce, suggested by GitHub Copilot
+	}, 300); // 300ms debounce
 });

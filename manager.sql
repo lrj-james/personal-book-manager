@@ -12,12 +12,12 @@ CREATE UNIQUE INDEX username ON users (username);
 -- Information of the books
 CREATE TABLE books (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    isbn TEXT NOT NULL,
-    author TEXT NOT NULL,
+    isbn TEXT,
+    author TEXT,
     title TEXT NOT NULL,
-    publish_area TEXT NOT NULL,
-    publisher TEXT NOT NULL,
-    year INTEGER NOT NULL,
+    publish_area TEXT,
+    publisher TEXT,
+    publish_date INTEGER,
     translator TEXT,
     translated_from_isbn TEXT,
     user_id INTEGER NOT NULL,
