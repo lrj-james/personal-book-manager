@@ -30,3 +30,52 @@ def after_request(response):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        if not username:
+            return render_template("error.html", message="Please provide a username")
+        if not password:
+            return render_template("error.html", message="Please provide a password")
+        
+        rows = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
+            return render_template("error.html", message="Invalid username and/or password")
+        
+        session["user_id"] = rows[0]["id"]
+        return redirect("/")
+    else:
+        return render_template("login.html")
+    
+@app.route("/register", methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        
+        if not username:
+            return render_template("error.html", message="Please provide a username")
+        if not password:
+            return render_template("error.html", message="Please provide a password")
+        if not confirmation:
+            return render_template("error.html", message="Please provide a confirmation")
+        if password != confirmation:
+            return render_template("error.html", message="Passwords do not match")
+        
+        hash = generate_password_hash(password)
+        
+        try:
+            db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=hash)
+        except:
+            return render_template("error.html", message="Username already exists")
+        rows = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        
+        session["user_id"] = rows[0]["id"]
+        return redirect("/")
+    else:
+        return render_template("register.html")
