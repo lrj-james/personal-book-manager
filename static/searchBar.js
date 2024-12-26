@@ -40,8 +40,7 @@ input.addEventListener('input', function () {
                             <div class="col-md-8">
                                 <p>Published at: ${bookInfo.publishedDate || 'Unknown'}</p>
                                 <p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
-                                <p>Language: ${bookInfo.language || 'Unknown'}</p>
-																<a href="${bookInfo.infoLink}" target="_blank" class="btn btn-primary btn-sm mt-2">More Info</a>
+                                <p>Language: ${bookInfo.language.toUpperCase() || 'Unknown'}</p>
                                 <button class="btn btn-success btn-sm mt-2" onclick="addToShelf(${JSON.stringify(bookInfo)})">Add to Shelf</button>
                             </div>
                         </div>
