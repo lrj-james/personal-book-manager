@@ -25,10 +25,17 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
 #Things above are from CS50
 
 @app.route("/")
 def index():
+    if session.get("username"):
+        flash("You've logged in as " + session.get("username"))
     return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -47,6 +54,8 @@ def login():
             return render_template("error.html", message="Invalid username and/or password")
         
         session["user_id"] = rows[0]["id"]
+        session["username"] = username
+        
         return redirect("/")
     else:
         return render_template("login.html")
