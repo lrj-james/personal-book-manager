@@ -1,11 +1,8 @@
-// This script fetches book data from the Google Books API and displays it in a list.
-// With a little help from GitHub Copilot.
-
-// Using Google Books API
+// Using Google Books API https://developers.google.com/books/docs/v1/getting_started
 const url = 'https://www.googleapis.com/books/v1/volumes';
 // Fields to fetch from the API
 const fields =
-	'items(volumeInfo(title,authors,publisher,publishedDate,publisher,language,imageLinks/smallThumbnail))';
+	'items(id,volumeInfo(title,authors,publisher,publishedDate,language,imageLinks/smallThumbnail))';
 
 let input = document.getElementById('indexSearchBar');
 let timeout = null;
@@ -26,26 +23,28 @@ input.addEventListener('input', function () {
 
 			if (books.items) {
 				books.items.forEach(book => {
+					const bookId = book.id;
 					const bookInfo = book.volumeInfo;
 					const div = document.createElement('div');
 					div.className = 'book-item';
 
 					div.innerHTML = `
-												<div class="book-title">${bookInfo.title}</div>
-                        <div class="book-authors">${bookInfo.authors ? bookInfo.authors.join(', ') : 'Unknown author'}</div>
-                        <div class="book-details row">
-                            <div class="col-md-4">
-                                <img src="${bookInfo.imageLinks?.smallThumbnail || 'https://via.placeholder.com/128'}" alt="Book cover" class="img-fluid">
-                            </div>
-                            <div class="col-md-8">
-                                <p>Published at: ${bookInfo.publishedDate || 'Unknown'}</p>
-                                <p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
-                                <p>Language: ${bookInfo.language.toUpperCase() || 'Unknown'}</p>
-                                <button class="btn btn-success btn-sm mt-2" onclick="addToShelf(${JSON.stringify(bookInfo)})">Add to Shelf</button>
-                            </div>
-                        </div>
-                    `;
+											<div class="book-title">${bookInfo.title}</div>
+											<div class="book-authors">${bookInfo.authors ? bookInfo.authors.join(', ') : 'Unknown author'}</div>
+											<div class="book-details row">
+													<div class="col-md-4">
+															<img src="${bookInfo.imageLinks?.smallThumbnail || 'https://via.placeholder.com/128'}" alt="Book cover" class="img-fluid">
+													</div>
+													<div class="col-md-8">
+															<p>Published at: ${bookInfo.publishedDate || 'Unknown'}</p>
+															<p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
+															<p>Language: ${bookInfo.language.toUpperCase() || 'Unknown'}</p>
+															<button class="btn btn-success btn-sm mt-2" id="addButton-${bookId}">Add to Shelf</button>
+													</div>
+											</div>
+									`;
 
+					// Toggle active class on click
 					div.addEventListener('click', function () {
 						document.querySelectorAll('.book-item').forEach(item => {
 							if (item !== div) item.classList.remove('active');
@@ -54,6 +53,13 @@ input.addEventListener('input', function () {
 					});
 
 					resultDiv.appendChild(div);
+
+					// Implement the function 'addBook' to the button
+					document
+						.getElementById(`addButton-${bookId}`)
+						.addEventListener('click', () => {
+							addBook(bookInfo);
+						});
 				});
 			}
 		} catch (error) {

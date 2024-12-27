@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, jsonify, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -49,7 +49,9 @@ def login():
         if not password:
             return render_template("error.html", message="Please provide a password")
         
-        rows = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        rows = db.execute(
+            "SELECT * FROM users WHERE username = ?", username
+            )
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], password):
             return render_template("error.html", message="Invalid username and/or password")
         
@@ -79,12 +81,71 @@ def signup():
         hash = generate_password_hash(password)
         
         try:
-            db.execute("INSERT INTO users (username, hash) VALUES (:username, :hash)", username=username, hash=hash)
+            db.execute(
+                """
+                INSERT INTO users (
+                    username, hash
+                ) VALUES (?, ?)
+                """, 
+                username, 
+                hash
+            )
         except:
             return render_template("error.html", message="Username already exists")
-        rows = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         
         session["user_id"] = rows[0]["id"]
         return redirect("/")
     else:
         return render_template("register.html")
+    
+@app.route("/add-book", methods=["POST"])
+def add_book():
+    book_info = request.get_json()
+    if not book_info:
+        return jsonify({'success': False, 'message': 'No book info provided'}), 400
+    
+    # Sanitize book info
+    title = book_info['title'].strip() if 'title' in book_info else 'Unknown title'
+    authors = ', '.join(book_info['authors']) if 'authors' in book_info else 'Unknown authors'
+    publisher = book_info['publisher'] if 'publisher' in book_info else 'Unknown publisher'
+    date = book_info['publishedDate'] if 'publishedDate' in book_info else 'Unknown date'
+    
+    # Add book to database
+    user_id = session.get('user_id')
+    if user_id:
+        print(f"{user_id} added a book {book_info['title']}")
+        db.execute(
+            """
+            INSERT INTO books (
+                title, 
+                authors, 
+                publisher,
+                publishedDate,
+                user_id
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            title, 
+            authors, 
+            publisher,
+            date,
+            user_id
+            )
+    else:
+        print(f"Anonymous added a book {book_info['title']}")
+        db.execute(
+            """
+            INSERT INTO books (
+                title, 
+                authors, 
+                publisher,
+                publishedDate
+            ) VALUES (?, ?, ?, ?)
+            """,
+            title, 
+            authors, 
+            publisher,
+            date,
+            )
+
+    return jsonify({'success': True, 'message': 'Book added successfully'}), 200
