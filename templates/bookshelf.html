@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Personal Book Manager - Bookshelf
+{% endblock %}
+
+{% block content %}
+	<div class="container mt-4">
+		<h2>Your Bookshelf</h2>
+		{% if books %}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Authors</th>
+						<th>Publisher</th>
+						<th>Published Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for book in books %}
+						<tr>
+							<td>{{ book.title }}</td>
+							<td>{{ book.authors }}</td>
+							<td>{{ book.publisher }}</td>
+							<td>{{ book.publishedDate }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% else %}
+			<p>You have no books in your bookshelf.</p>
+		{% endif %}
+	</div>
+{% endblock %}
