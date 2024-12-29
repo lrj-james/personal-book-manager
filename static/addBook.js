@@ -1,6 +1,5 @@
 function addBook(bookInfo) {
 	// Send a POST request to the server
-	console.log('addBook', bookInfo);
 	(async () => {
 		let response = await fetch('/add-book', {
 			method: 'POST',
@@ -13,7 +12,7 @@ function addBook(bookInfo) {
 		if (result.success) {
 			alert('Book added successfully!');
 		} else {
-			alert('Error adding book!' + result.message);
+			alert('Error: ' + result.message);
 		}
 	})();
 }

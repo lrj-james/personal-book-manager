@@ -4,6 +4,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, jsonify, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from functools import wraps
 
 # Configure application
 app = Flask(__name__)
@@ -17,6 +18,22 @@ Session(app)
 db = SQL("sqlite:///manager.db")
 
 
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    https://flask.palletsprojects.com/en/latest/patterns/viewdecorators/
+    """
+
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -25,18 +42,24 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 @app.route("/logout")
+@login_required
 def logout():
     session.clear()
     return redirect("/")
 
 #Things above are from CS50
 
+# ===================================================
+
+# Index page is the search page
 @app.route("/")
 def index():
     if session.get("username"):
         flash("You've logged in as " + session.get("username"))
     return render_template("index.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -61,6 +84,7 @@ def login():
         return redirect("/")
     else:
         return render_template("login.html")
+    
     
 @app.route("/register", methods=["GET", "POST"])
 def signup():
@@ -99,6 +123,8 @@ def signup():
     else:
         return render_template("register.html")
     
+    
+# This route catches the async request from the frontend
 @app.route("/add-book", methods=["POST"])
 def add_book():
     book_info = request.get_json()
@@ -132,20 +158,23 @@ def add_book():
             user_id
             )
     else:
-        print(f"Anonymous added a book {book_info['title']}")
-        db.execute(
-            """
-            INSERT INTO books (
-                title, 
-                authors, 
-                publisher,
-                publishedDate
-            ) VALUES (?, ?, ?, ?)
-            """,
-            title, 
-            authors, 
-            publisher,
-            date,
-            )
+        return jsonify({'success': False, 'message': 'User not logged in'}), 400
 
     return jsonify({'success': True, 'message': 'Book added successfully'}), 200
+
+
+@app.route("/bookshelf", methods=["GET, POST"])
+@login_required
+def bookshelf():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect("/login")
+    
+    books = db.execute(
+        """
+        SELECT * FROM books WHERE user_id = ?
+        """,
+        user_id
+    )
+    
+    return render_template("bookshelf.html", books=books)

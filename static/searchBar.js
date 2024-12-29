@@ -40,7 +40,7 @@ input.addEventListener('input', function () {
 															<p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
 															<p>Language: ${bookInfo.language.toUpperCase() || 'Unknown'}</p>
 															<button class="btn btn-success btn-sm mt-2" id="addButton-${bookId}">Add to Shelf</button>
-													</div>
+														</div>
 											</div>
 									`;
 
