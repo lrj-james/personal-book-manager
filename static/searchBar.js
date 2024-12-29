@@ -57,8 +57,11 @@ input.addEventListener('input', function () {
 					div.innerHTML =
 						bookItemTemplate_1 + bookItemTemplate_2 + bookItemTemplate_3;
 
-					// Toggle active class on click
-					div.addEventListener('click', function () {
+					// Toggle active class on click, but not when a button is clicked
+					div.addEventListener('click', function (event) {
+						if (event.target.tagName === 'BUTTON') {
+							return;
+						}
 						document.querySelectorAll('.book-item').forEach(item => {
 							if (item !== div) item.classList.remove('active');
 						});
@@ -67,23 +70,25 @@ input.addEventListener('input', function () {
 
 					resultDiv.appendChild(div);
 
-					// Implement the function 'addBook' to the button
-					document
-						.getElementById(`addButton-${bookId}`)
-						.addEventListener('click', () => {
-							if (isLoggedIn) {
-								addBook(bookInfo);
-							} else {
-								alert('Please log in to add books to your shelf.');
-							}
-						});
-
 					// Implement the function 'exportCitation' to the button
 					document
 						.getElementById(`exportButton-${bookId}`)
 						.addEventListener('click', () => {
 							exportCitation(bookInfo);
 						});
+
+					// Implement the function 'addBook' to the button
+					if (isLoggedIn) {
+						document
+							.getElementById(`addButton-${bookId}`)
+							.addEventListener('click', () => {
+								if (isLoggedIn) {
+									addBook(bookInfo);
+								} else {
+									alert('Please log in to add books to your shelf.');
+								}
+							});
+					}
 				});
 			}
 		} catch (error) {

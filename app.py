@@ -168,7 +168,7 @@ def add_book():
     return jsonify({'success': True, 'message': 'Book added successfully'}), 200
 
 
-@app.route("/bookshelf", methods=["GET, POST"])
+@app.route("/bookshelf", methods=["GET", "POST"])
 @login_required
 def bookshelf():
     user_id = session.get("user_id")
