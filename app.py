@@ -56,9 +56,14 @@ def logout():
 # Index page is the search page
 @app.route("/")
 def index():
-    if session.get("username"):
+    username = session.get("username")
+    if username:
+        is_logged_in = True
         flash("You've logged in as " + session.get("username"))
-    return render_template("index.html")
+    else:
+        is_logged_in = False
+        
+    return render_template("index.html", is_logged_in=is_logged_in)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -167,8 +172,6 @@ def add_book():
 @login_required
 def bookshelf():
     user_id = session.get("user_id")
-    if not user_id:
-        return redirect("/login")
     
     books = db.execute(
         """

@@ -28,21 +28,34 @@ input.addEventListener('input', function () {
 					const div = document.createElement('div');
 					div.className = 'book-item';
 
-					div.innerHTML = `
-											<div class="book-title">${bookInfo.title}</div>
-											<div class="book-authors">${bookInfo.authors ? bookInfo.authors.join(', ') : 'Unknown author'}</div>
-											<div class="book-details row">
-													<div class="col-md-4">
-															<img src="${bookInfo.imageLinks?.smallThumbnail || 'https://via.placeholder.com/128'}" alt="Book cover" class="img-fluid">
-													</div>
-													<div class="col-md-8">
-															<p>Published at: ${bookInfo.publishedDate || 'Unknown'}</p>
-															<p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
-															<p>Language: ${bookInfo.language.toUpperCase() || 'Unknown'}</p>
-															<button class="btn btn-success btn-sm mt-2" id="addButton-${bookId}">Add to Shelf</button>
-														</div>
-											</div>
-									`;
+					const bookItemTemplate_1 = `
+						<div class="book-title">${bookInfo.title}</div>
+						<div class="book-authors">${bookInfo.authors ? bookInfo.authors.join(', ') : 'Unknown author'}</div>
+						<div class="book-details row">
+							<div class="col-md-4">
+								<img src="${bookInfo.imageLinks?.smallThumbnail || 'https://via.placeholder.com/128'}" alt="Book cover" class="img-fluid">
+							</div>
+							<div class="col-md-8">
+								<p>Published at: ${bookInfo.publishedDate || 'Unknown'}</p>
+								<p>Publisher: ${bookInfo.publisher || 'Unknown'}</p>
+								<p>Language: ${bookInfo.language.toUpperCase() || 'Unknown'}</p>
+								`;
+					const bookItemTemplate_2 = isLoggedIn
+						? `
+								<button class="btn btn-primary btn-sm mt-2" id="exportButton-${bookId}">Export Citation</button>
+								<button class="btn btn-success btn-sm mt-2" id="addButton-${bookId}">Add to Shelf</button>
+							`
+						: `
+								<button class="btn btn-primary btn-sm mt-2" id="exportButton-${bookId}">Export Citation</button>
+							`;
+
+					const bookItemTemplate_3 = `
+							</div>
+						</div>
+						`;
+
+					div.innerHTML =
+						bookItemTemplate_1 + bookItemTemplate_2 + bookItemTemplate_3;
 
 					// Toggle active class on click
 					div.addEventListener('click', function () {
@@ -58,7 +71,18 @@ input.addEventListener('input', function () {
 					document
 						.getElementById(`addButton-${bookId}`)
 						.addEventListener('click', () => {
-							addBook(bookInfo);
+							if (isLoggedIn) {
+								addBook(bookInfo);
+							} else {
+								alert('Please log in to add books to your shelf.');
+							}
+						});
+
+					// Implement the function 'exportCitation' to the button
+					document
+						.getElementById(`exportButton-${bookId}`)
+						.addEventListener('click', () => {
+							exportCitation(bookInfo);
 						});
 				});
 			}

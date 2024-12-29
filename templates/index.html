@@ -21,6 +21,22 @@
 			<div class="list-group" id="indexSearchResult"></div>
 		</div>
 	</div>
+
+	<div id="exportModal" class="modal">
+		<div class="modal-content">
+				<span class="close">&times;</span>
+				<p id="exportContent"></p>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		const isLoggedIn = {{ is_logged_in | tojson }};
+	</script>
 	<script src="static/addBook.js"></script>
+	<script src="static/generateCitation.js"></script>
+	<script src="static/exportCitation.js"></script>
 	<script src="static/searchBar.js"></script>
 {% endblock %}
