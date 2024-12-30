@@ -48,21 +48,42 @@ function handleNames(names, style) {
 	if (names.length >= 20 && style === 'APA') {
 		return result.slice(0, 20).join(', ') + '...' + result.slice(-1);
 	} else {
-		return (result.join(', ') + '. ').replace('..', '.');
+		return result.join(', ') + '. ';
 	}
+}
+
+function sanitizeCitationString(str) {
+	let prevStr;
+	do {
+		prevStr = str;
+		str = str
+			.replace('(). ', '')
+			.replace('. .', '.')
+			.replace(', .', '.')
+			.replace(' , ', '.')
+			.replace('..', '.')
+			.replace(',.', '.');
+	} while (str !== prevStr);
+	return str;
 }
 
 // Function to generate APA citation
 function generateAPA(bookInfo) {
-	return `${handleNames(bookInfo.authors, 'APA')} (${bookInfo.publishedDate?.slice(0, 4) || ''}). <i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}.`;
+	return sanitizeCitationString(
+		`${handleNames(bookInfo.authors, 'APA')} (${bookInfo.publishedDate?.slice(0, 4) || ''}). <i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}.`
+	);
 }
 
 // Function to generate MLA citation
 function generateMLA(bookInfo) {
-	return `${handleNames(bookInfo.authors, 'MLA')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`;
+	return sanitizeCitationString(
+		`${handleNames(bookInfo.authors, 'MLA')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`
+	);
 }
 
 // Function to generate Chicago citation
 function generateChicago(bookInfo) {
-	return `${handleNames(bookInfo.authors, 'Chicago')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`;
+	return sanitizeCitationString(
+		`${handleNames(bookInfo.authors, 'Chicago')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`
+	);
 }

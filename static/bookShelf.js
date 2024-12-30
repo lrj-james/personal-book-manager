@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
 	const selectAllCheckbox = document.getElementById('selectAll');
 	const bookCheckboxes = document.querySelectorAll('input[name="book"]');
-	const exportButton = document.getElementById('exportSelected');
+	const exportAPAButton = document.getElementById('exportAPA');
+	const exportMLAButton = document.getElementById('exportMLA');
+	const exportChicagoButton = document.getElementById('exportChicago');
 	const deleteButton = document.getElementById('deleteSelected');
 
 	// Handle select all checkbox
@@ -13,18 +15,45 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
-	// Handle export selected books
-	if (exportButton) {
-		exportButton.addEventListener('click', function () {
+	// Handle export selected books as APA
+	if (exportAPAButton) {
+		exportAPAButton.addEventListener('click', function () {
 			const selectedBooks = Array.from(bookCheckboxes)
 				.filter(checkbox => checkbox.checked)
-				.map(checkbox => checkbox.value);
-
-			console.log(selectedBooks);
+				.map(checkbox => books.find(book => book.id == checkbox.value));
 
 			if (selectedBooks.length > 0) {
-				// Implement export functionality here
-				alert('Exporting books: ' + selectedBooks.join(', '));
+				exportGroupCitation(selectedBooks, 'APA');
+			} else {
+				alert('No books selected for export.');
+			}
+		});
+	}
+
+	// Handle export selected books as MLA
+	if (exportMLAButton) {
+		exportMLAButton.addEventListener('click', function () {
+			const selectedBooks = Array.from(bookCheckboxes)
+				.filter(checkbox => checkbox.checked)
+				.map(checkbox => books.find(book => book.id == checkbox.value));
+
+			if (selectedBooks.length > 0) {
+				exportGroupCitation(selectedBooks, 'MLA');
+			} else {
+				alert('No books selected for export.');
+			}
+		});
+	}
+
+	// Handle export selected books as Chicago
+	if (exportChicagoButton) {
+		exportChicagoButton.addEventListener('click', function () {
+			const selectedBooks = Array.from(bookCheckboxes)
+				.filter(checkbox => checkbox.checked)
+				.map(checkbox => books.find(book => book.id == checkbox.value));
+
+			if (selectedBooks.length > 0) {
+				exportGroupCitation(selectedBooks, 'Chicago');
 			} else {
 				alert('No books selected for export.');
 			}

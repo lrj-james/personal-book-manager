@@ -74,7 +74,7 @@ input.addEventListener('input', function () {
 					document
 						.getElementById(`exportButton-${bookId}`)
 						.addEventListener('click', () => {
-							exportCitation(bookInfo);
+							exportSingleCitation(bookInfo);
 						});
 
 					// Implement the function 'addBook' to the button

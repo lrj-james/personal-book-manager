@@ -1,4 +1,5 @@
-function exportCitation(bookInfo) {
+// Export single citation at the index route
+function exportSingleCitation(bookInfo) {
 	const modal = document.getElementById('exportModal');
 	const span = document.getElementsByClassName('close')[0];
 	const exportContent = document.getElementById('exportContent');
@@ -61,4 +62,38 @@ function exportCitation(bookInfo) {
 			selection.removeAllRanges();
 		});
 	});
+}
+
+// Export group citation at the bookshelf route
+function exportGroupCitation(books, style) {
+	const citations = books.map(book => {
+		switch (style) {
+			case 'APA':
+				return generateAPA(book);
+			case 'MLA':
+				return generateMLA(book);
+			case 'Chicago':
+				return generateChicago(book);
+			default:
+				return '';
+		}
+	});
+
+	const citationHtml = citations
+		.map(citation => `<p>${citation}</p>`)
+		.join('<hr>');
+
+	const citationText = citations.join('\n\n');
+
+	try {
+		navigator.clipboard.write([
+			new ClipboardItem({
+				'text/html': new Blob([citationHtml], { type: 'text/html' }),
+				'text/plain': new Blob([citationText], { type: 'text/plain' }),
+			}),
+		]);
+		alert('Citations copied to clipboard!');
+	} catch (err) {
+		console.error('Failed to copy citations: ', err);
+	}
 }

@@ -33,9 +33,24 @@
 						{% endfor %}
 					</tbody>
 				</table>
-				<button type="button" id="exportSelected" class="btn btn-primary">
-					Export Selected
-				</button>
+				<div class="btn-group">
+					<button
+						type="button"
+						class="btn btn-primary dropdown-toggle"
+						data-bs-toggle="dropdown"
+						aria-haspopup="true"
+						aria-expanded="false"
+					>
+						Export Selected
+					</button>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#" id="exportAPA">Export as APA</a>
+						<a class="dropdown-item" href="#" id="exportMLA">Export as MLA</a>
+						<a class="dropdown-item" href="#" id="exportChicago"
+							>Export as Chicago</a
+						>
+					</div>
+				</div>
 				<button type="button" id="deleteSelected" class="btn btn-danger">
 					Delete Selected
 				</button>
@@ -47,5 +62,10 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+    const books = {{ books | tojson }};
+  </script>
+	<script src="static/generateCitation.js"></script>
+	<script src="static/exportCitation.js"></script>
 	<script src="static/bookShelf.js"></script>
 {% endblock %}
