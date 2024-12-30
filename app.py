@@ -147,7 +147,6 @@ def add_book():
     # Add book to database
     user_id = session.get('user_id')
     if user_id:
-        print(f"{user_id} added a book {book_info['title']}")
         db.execute(
             """
             INSERT INTO books (
