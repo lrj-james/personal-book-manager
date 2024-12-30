@@ -4,8 +4,10 @@ services:
     env: docker
     plan: free
     dockerfilePath: Dockerfile
-    buildCommand: ""
-    startCommand: ""
+    buildCommand: ''
+    startCommand: ''
     envVars:
       - key: FLASK_ENV
         value: production
+      - key: PORT
+        value: 5000

@@ -1,3 +1,5 @@
+import os
+
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, jsonify, request, session
 from flask_session import Session
@@ -15,6 +17,8 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///manager.db")
 
+# Ensure templates are auto-reloaded
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 def login_required(f):
     """
@@ -198,3 +202,7 @@ def bookshelf():
             book['authors'] = book['authors'].split(', ')
             
         return render_template("bookshelf.html", books=books)
+    
+    
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
