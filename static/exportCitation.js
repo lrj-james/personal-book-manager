@@ -38,7 +38,7 @@ function exportCitation(bookInfo) {
 
 	// Add event listeners to citation fields
 	document.querySelectorAll('.citation').forEach(citation => {
-		citation.addEventListener('click', function () {
+		citation.addEventListener('click', async function () {
 			const range = document.createRange();
 			range.selectNodeContents(this);
 			const selection = window.getSelection();
@@ -46,7 +46,12 @@ function exportCitation(bookInfo) {
 			selection.addRange(range);
 
 			try {
-				document.execCommand('copy');
+				await navigator.clipboard.write([
+					new ClipboardItem({
+						'text/html': new Blob([this.innerHTML], { type: 'text/html' }),
+						'text/plain': new Blob([this.textContent], { type: 'text/plain' }),
+					}),
+				]);
 				alert('Citation copied to clipboard!');
 			} catch (err) {
 				console.error('Failed to copy citation: ', err);

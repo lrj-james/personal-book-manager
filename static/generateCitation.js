@@ -1,6 +1,6 @@
 function handleNames(names, style) {
 	// If there are no authors, return an empty string
-	if (names.length === 0) {
+	if (!names) {
 		return '';
 	}
 
@@ -54,29 +54,15 @@ function handleNames(names, style) {
 
 // Function to generate APA citation
 function generateAPA(bookInfo) {
-	return `
-    ${handleNames(bookInfo.authors, 'APA')} 
-    (${bookInfo.publishedDate?.slice(0, 4) || ''}). 
-    <i>${bookInfo.title || ''}</i>. 
-    ${bookInfo.publisher || ''}.
-  `;
+	return `${handleNames(bookInfo.authors, 'APA')} (${bookInfo.publishedDate?.slice(0, 4) || ''}). <i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}.`;
 }
 
 // Function to generate MLA citation
 function generateMLA(bookInfo) {
-	return `
-    ${handleNames(bookInfo.authors, 'MLA')}
-    <i>${bookInfo.title || ''}</i>. 
-    ${bookInfo.publisher || ''}, 
-    ${bookInfo.publishedDate?.slice(0, 4) || ''}.
-`;
+	return `${handleNames(bookInfo.authors, 'MLA')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`;
 }
 
 // Function to generate Chicago citation
 function generateChicago(bookInfo) {
-	return `
-    ${handleNames(bookInfo.authors, 'Chicago')}
-    <i>${bookInfo.title || ''}</i>. 
-    ${bookInfo.publisher || ''}, 
-    ${bookInfo.publishedDate?.slice(0, 4) || ''}.`;
+	return `${handleNames(bookInfo.authors, 'Chicago')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`;
 }

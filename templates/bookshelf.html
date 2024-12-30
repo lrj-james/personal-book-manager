@@ -8,28 +8,44 @@
 	<div class="container mt-4">
 		<h2>Your Bookshelf</h2>
 		{% if books %}
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Authors</th>
-						<th>Publisher</th>
-						<th>Published Date</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for book in books %}
+			<form id="bookshelfForm">
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<td>{{ book.title }}</td>
-							<td>{{ book.authors }}</td>
-							<td>{{ book.publisher }}</td>
-							<td>{{ book.publishedDate }}</td>
+							<th><input type="checkbox" id="selectAll" /></th>
+							<th>Title</th>
+							<th>Authors</th>
+							<th>Publisher</th>
+							<th>Published Date</th>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{% for book in books %}
+							<tr>
+								<td>
+									<input type="checkbox" name="book" value="{{ book.id }}" />
+								</td>
+								<td>{{ book.title }}</td>
+								<td>{{ ', '.join(book.authors) }}</td>
+								<td>{{ book.publisher }}</td>
+								<td>{{ book.publishedDate }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<button type="button" id="exportSelected" class="btn btn-primary">
+					Export Selected
+				</button>
+				<button type="button" id="deleteSelected" class="btn btn-danger">
+					Delete Selected
+				</button>
+			</form>
 		{% else %}
 			<p>You have no books in your bookshelf.</p>
 		{% endif %}
 	</div>
+{% endblock %}
+
+{% block scripts %}
+	<script src="static/bookShelf.js"></script>
 {% endblock %}

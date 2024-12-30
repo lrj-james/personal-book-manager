@@ -173,11 +173,30 @@ def add_book():
 def bookshelf():
     user_id = session.get("user_id")
     
-    books = db.execute(
-        """
-        SELECT * FROM books WHERE user_id = ?
-        """,
-        user_id
-    )
-    
-    return render_template("bookshelf.html", books=books)
+    if request.method == "POST":
+        data = request.get_json()
+        book_ids = data.get('books', [])
+
+        if not book_ids:
+            return jsonify({'success': False, 'message': 'No books selected for deletion'}), 400
+
+        db.execute(
+            """
+            DELETE FROM books WHERE id IN ({seq}) AND user_id = ?
+            """.format(seq=','.join(['?']*len(book_ids))),
+            *book_ids, user_id
+        )
+
+        return jsonify({'success': True, 'message': 'Books deleted successfully'}), 200
+
+    else:
+        books = db.execute(
+            """
+            SELECT * FROM books WHERE user_id = ?
+            """,
+            user_id
+        )
+        for book in books:
+            book['authors'] = book['authors'].split(', ')
+            
+        return render_template("bookshelf.html", books=books)
