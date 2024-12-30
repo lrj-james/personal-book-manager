@@ -52,6 +52,13 @@ function handleNames(names, style) {
 	}
 }
 
+function turnDateToYear(dates) {
+	if (!dates) {
+		return '';
+	}
+	return dates.toString().slice(0, 4);
+}
+
 function sanitizeCitationString(str) {
 	let prevStr;
 	do {
@@ -70,20 +77,20 @@ function sanitizeCitationString(str) {
 // Function to generate APA citation
 function generateAPA(bookInfo) {
 	return sanitizeCitationString(
-		`${handleNames(bookInfo.authors, 'APA')} (${bookInfo.publishedDate?.slice(0, 4) || ''}). <i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}.`
+		`${handleNames(bookInfo.authors, 'APA')} (${turnDateToYear(bookInfo.publishedDate)}). <i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}.`
 	);
 }
 
 // Function to generate MLA citation
 function generateMLA(bookInfo) {
 	return sanitizeCitationString(
-		`${handleNames(bookInfo.authors, 'MLA')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`
+		`${handleNames(bookInfo.authors, 'MLA')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${turnDateToYear(bookInfo.publishedDate)}.`
 	);
 }
 
 // Function to generate Chicago citation
 function generateChicago(bookInfo) {
 	return sanitizeCitationString(
-		`${handleNames(bookInfo.authors, 'Chicago')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${bookInfo.publishedDate?.slice(0, 4) || ''}.`
+		`${handleNames(bookInfo.authors, 'Chicago')}<i>${bookInfo.title || ''}</i>. ${bookInfo.publisher || ''}, ${turnDateToYear(bookInfo.publishedDate)}.`
 	);
 }

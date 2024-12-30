@@ -1,3 +1,11 @@
+// Function to show toast notification
+function showToast(message) {
+	const toastBody = document.getElementById('toastBody');
+	toastBody.textContent = message;
+	const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+	toast.show();
+}
+
 // Export single citation at the index route
 function exportSingleCitation(bookInfo) {
 	const modal = document.getElementById('exportModal');
@@ -53,7 +61,7 @@ function exportSingleCitation(bookInfo) {
 						'text/plain': new Blob([this.textContent], { type: 'text/plain' }),
 					}),
 				]);
-				alert('Citation copied to clipboard!');
+				showToast('Citation copied to clipboard!');
 			} catch (err) {
 				console.error('Failed to copy citation: ', err);
 			}
@@ -81,9 +89,34 @@ function exportGroupCitation(books, style) {
 
 	const citationHtml = citations
 		.map(citation => `<p>${citation}</p>`)
-		.join('<hr>');
+		.join('\n');
 
-	const citationText = citations.join('\n\n');
+	const citationText = citations.join('\n');
+
+	// Set the content of the modal
+	const modal = document.getElementById('exportModal');
+	const span = document.getElementsByClassName('close')[0];
+	const exportContent = document.getElementById('exportContent');
+
+	exportContent.innerHTML = `
+	    <h2>Citations</h2>
+	    ${citationHtml}
+	`;
+
+	// Display the modal
+	modal.style.display = 'block';
+
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function () {
+		modal.style.display = 'none';
+	};
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function (event) {
+		if (event.target == modal) {
+			modal.style.display = 'none';
+		}
+	};
 
 	try {
 		navigator.clipboard.write([
@@ -92,7 +125,7 @@ function exportGroupCitation(books, style) {
 				'text/plain': new Blob([citationText], { type: 'text/plain' }),
 			}),
 		]);
-		alert('Citations copied to clipboard!');
+		showToast('Citation copied to clipboard!');
 	} catch (err) {
 		console.error('Failed to copy citations: ', err);
 	}

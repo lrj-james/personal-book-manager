@@ -1,3 +1,11 @@
+// Function to show toast notification
+function showToast(message) {
+	const toastBody = document.getElementById('toastBody');
+	toastBody.textContent = message;
+	const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+	toast.show();
+}
+
 function addBook(bookInfo) {
 	// Send a POST request to the server
 	(async () => {
@@ -10,7 +18,7 @@ function addBook(bookInfo) {
 		});
 		let result = await response.json();
 		if (result.success) {
-			alert('Book added successfully!');
+			showToast('Book added successfully!');
 		} else {
 			alert('Error: ' + result.message);
 		}

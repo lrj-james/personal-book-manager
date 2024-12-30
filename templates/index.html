@@ -26,7 +26,7 @@
 
 {% block scripts %}
 	<script>
-		const isLoggedIn = {{ is_logged_in | tojson }};
+		let isLoggedIn = {{ is_logged_in | tojson }};
 	</script>
 	<script src="static/addBook.js"></script>
 	<script src="static/generateCitation.js"></script>

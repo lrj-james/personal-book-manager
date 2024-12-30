@@ -1,5 +1,3 @@
-import os
-
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, jsonify, request, session
 from flask_session import Session

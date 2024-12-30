@@ -1,3 +1,11 @@
+// Function to show toast notification
+function showToast(message) {
+	const toastBody = document.getElementById('toastBody');
+	toastBody.textContent = message;
+	const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+	toast.show();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	const selectAllCheckbox = document.getElementById('selectAll');
 	const bookCheckboxes = document.querySelectorAll('input[name="book"]');
@@ -78,8 +86,10 @@ document.addEventListener('DOMContentLoaded', function () {
 					.then(response => response.json())
 					.then(data => {
 						if (data.success) {
-							alert('Books deleted successfully.');
-							location.reload(); // Reload the page to update the book list
+							showToast('Books deleted successfully.');
+							setTimeout(() => {
+								location.reload(); // Reload the page to update the book list
+							}, 800);
 						} else {
 							alert('Failed to delete books.');
 						}
