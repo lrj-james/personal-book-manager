@@ -51,7 +51,7 @@ def logout():
     session.clear()
     return redirect("/")
 
-#Things above are from CS50
+#Things above are from CS50 Pset9 Finance
 
 # ===================================================
 
@@ -68,6 +68,7 @@ def index():
     return render_template("index.html", is_logged_in=is_logged_in)
 
 
+# Rewrite from CS50 Pset9 Finance
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -92,7 +93,8 @@ def login():
     else:
         return render_template("login.html")
     
-    
+
+# Rewrite from CS50 Pset9 Finance    
 @app.route("/register", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -130,7 +132,8 @@ def signup():
     else:
         return render_template("register.html")
     
-    
+
+# Assisted by GitHub Copilot with GPT-4o modal    
 # This route catches the async request from the frontend
 @app.route("/add-book", methods=["POST"])
 def add_book():
@@ -169,6 +172,7 @@ def add_book():
     return jsonify({'success': True, 'message': 'Book added successfully'}), 200
 
 
+# Assisted by GitHub Copilot with GPT-4o modal  
 @app.route("/bookshelf", methods=["GET", "POST"])
 @login_required
 def bookshelf():

@@ -1,5 +1,8 @@
+// Assisted by GitHub Copilot with GPT-4o modal
+
 // Using Google Books API https://developers.google.com/books/docs/v1/getting_started
 const url = 'https://www.googleapis.com/books/v1/volumes';
+
 // Fields to fetch from the API
 const fields =
 	'items(id,volumeInfo(title,authors,publisher,publishedDate,language,imageLinks/smallThumbnail))';

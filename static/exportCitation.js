@@ -1,3 +1,5 @@
+// Assisted by GitHub Copilot with GPT-4o modal
+
 // Function to show toast notification
 function showToast(message) {
 	const toastBody = document.getElementById('toastBody');
