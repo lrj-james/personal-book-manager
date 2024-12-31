@@ -128,6 +128,7 @@ def signup():
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         
         session["user_id"] = rows[0]["id"]
+        session["username"] = username
         return redirect("/")
     else:
         return render_template("register.html")

@@ -1,4 +1,4 @@
-# personal-book-manager
+# Personal Book Manager
 
 #### Video Demo: <URL HERE>
 
