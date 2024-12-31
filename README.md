@@ -1,6 +1,8 @@
 # Personal Book Manager
 
-#### Video Demo: <URL HERE>
+#### Video Demo: [<URL HERE>](https://youtu.be/1KiSCA_6Odk)
+
+#### App URL: [<URL HERE>](https://personal-book-manager.onrender.com)
 
 #### Description:
 
@@ -19,7 +21,8 @@ This application, named "Personal Book Manager," is a web-based platform designe
 
 ##### Features:
 
-1. User Authentication: Secure user registration and login functionality, with password hashing and session management.
-2. Book Management: Users can add, view, edit, and delete books from their personal collection.
-3. Citation Export: Users can export book citations in various formats (APA, MLA, Chicago) and copy them to the clipboard.
-4. Search Functionality: Integration with the Google Books API to search for books and add them to the user's collection.
+The Personal Book Manager offers a comprehensive set of features to help users manage their book collections efficiently. The application provides secure user authentication, allowing users to register and log in with hashed passwords and session management. Once logged in, users can add new books to their collection by entering book details or searching for books using the Google Books API. The search functionality allows users to find books and add them to their collection with ease.
+
+Users can view their entire book collection on the bookshelf page, where they can see detailed information about each book, including the title, authors, publisher, and published date. The application also allows users to edit the details of their books or delete books from their collection. To assist with academic writing, the Personal Book Manager includes a citation export feature. Users can export book citations in various formats, such as APA, MLA, and Chicago, and copy them to the clipboard for easy use in their documents.
+
+The application is designed with a responsive layout, ensuring that it works seamlessly across different devices and screen sizes. Users receive immediate feedback through toast notifications for successful actions, such as adding or exporting books, while alerts are used to notify users of any errors or issues. Overall, the Personal Book Manager provides a robust and user-friendly solution for managing personal book collections, leveraging modern web technologies to deliver a high-quality user experience.
