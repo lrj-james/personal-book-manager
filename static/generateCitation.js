@@ -5,48 +5,63 @@ function handleNames(names, style) {
 	}
 
 	let result = [];
+	let count = 0;
 
 	for (let name of names) {
 		let nameArray = name.split(' ');
 
-		if (nameArray.length === 1) {
-			result.push(nameArray[0]);
-		} else if (nameArray.length === 2) {
-			switch (style) {
-				case 'APA':
+		switch (style) {
+			case 'APA':
+				if (nameArray.length === 1) {
+					result.push(nameArray[0]);
+				} else if (nameArray.length === 2) {
 					result.push(`${nameArray[1]}, ${nameArray[0][0].toUpperCase()}.`);
-					break;
-				case 'MLA':
-					result.push(`${nameArray[1]}, ${nameArray[0]}`);
-					break;
-				case 'Chicago':
-					result.push(`${nameArray[1]}, ${nameArray[0]}`);
-					break;
-			}
-		} else if (nameArray.length === 3) {
-			switch (style) {
-				case 'APA':
+				} else if (nameArray.length === 3) {
 					result.push(
 						`${nameArray[2]}, ${nameArray[0][0].toUpperCase()}. ${nameArray[1][0].toUpperCase()}.`
 					);
-					break;
-				case 'MLA':
+				} else {
+					result.push(name);
+				}
+				break;
+			case 'MLA':
+				if (nameArray.length === 1) {
+					result.push(nameArray[0]);
+				} else if (nameArray.length === 2) {
+					result.push(`${nameArray[1]}, ${nameArray[0]}`);
+				} else if (nameArray.length === 3) {
 					result.push(
 						`${nameArray[2]}, ${nameArray[0]} ${nameArray[1][0].toUpperCase()}.`
 					);
-					break;
-				case 'Chicago':
-					result.push(`${nameArray[2]}, ${nameArray[0]} ${nameArray[1]}`);
-					break;
-			}
-		} else {
-			result.push(name);
+				} else {
+					result.push(name);
+				}
+				break;
+			case 'Chicago':
+				if (count === 0) {
+					if (nameArray.length === 1) {
+						result.push(nameArray[0]);
+					} else if (nameArray.length === 2) {
+						result.push(`${nameArray[1]}, ${nameArray[0]}`);
+					} else if (nameArray.length === 3) {
+						result.push(`${nameArray[2]}, ${nameArray[0]} ${nameArray[1]}`);
+					} else {
+						result.push(name);
+					}
+				} else {
+					result.push(name);
+				}
+				count++;
+				break;
 		}
 	}
 
 	// If there are more than 20 authors, return the first 20 authors and the last author
-	if (names.length >= 20 && style === 'APA') {
+	if (style === 'APA' && names.length >= 20) {
 		return result.slice(0, 20).join(', ') + '...' + result.slice(-1);
+	} else if (style === 'Chicago' && names.length >= 2) {
+		let lastElement = result.pop();
+		return result.join(', ') + ' and ' + lastElement + '. ';
 	} else {
 		return result.join(', ') + '. ';
 	}
